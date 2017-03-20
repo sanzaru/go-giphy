@@ -1,5 +1,4 @@
 # go-giphy
-Giphy API implementation in Go
 
 ## Description
 giphy.com API implementation in Go
