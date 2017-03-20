@@ -42,6 +42,12 @@ type Giphy struct {
 }
 
 
+func NewGiphy(apiKey string) * Giphy {
+    return &Giphy{
+        apiKey: apiKey,
+    }
+}
+
 func (g * Giphy) buildUrl(action string) string {
     return BASE_URL + action + "?api_key=" + g.apiKey
 }
@@ -62,20 +68,3 @@ func (g * Giphy) fetch(url string) ([]byte, error) {
 
     return body, nil
 }
-
-
-func NewGiphy(apiKey string) * Giphy {
-    return &Giphy{
-        apiKey: apiKey,
-    }
-}
-
-
-/*func (g * Giphy) GetTrending() (*giphyData, error) {
-    body, err := g.getData(g.buildUrl("trending") + "&limit=1")
-    if err != nil {
-        return nil, err
-    }
-
-    return g.parseData(body);
-}*/
