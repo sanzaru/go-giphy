@@ -22,7 +22,7 @@ giphy.com API implementation in Go
 package main
 
 import (
-	"fmt"
+    "fmt"
     "github.com/sanzaru/go-giphy"
 )
 
@@ -46,7 +46,7 @@ func main() {
 package main
 
 import (
-	"fmt"
+    "fmt"
     "github.com/sanzaru/go-giphy"
 )
 
@@ -70,7 +70,7 @@ func main() {
 package main
 
 import (
-	"fmt"
+    "fmt"
     "github.com/sanzaru/go-giphy"
 )
 
@@ -94,7 +94,7 @@ func main() {
 package main
 
 import (
-	"fmt"
+    "fmt"
     "github.com/sanzaru/go-giphy"
 )
 
