@@ -1,7 +1,7 @@
 # go-giphy
 
 ## Description
-giphy.com API implementation in Go
+giphy.com API client implementation in Go programming language.
 
 ## Installation
 
@@ -17,6 +17,7 @@ giphy.com API implementation in Go
 ## Examples
 
 ### Search
+Search all Giphy GIFs for a word or phrase. Punctuation will be stripped and ignored. Use a plus or url encode for phrases.
 
 Function parameters:
 * query (string): The search query
