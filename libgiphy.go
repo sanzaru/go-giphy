@@ -7,10 +7,12 @@ package libgiphy
 import (
     "net/http"
     "io/ioutil"
+    "encoding/json"
+    "strings"
 )
 
 const (
-    BASE_URL = "http://api.giphy.com/v1/gifs/"
+    BASE_URL = "http://api.giphy.com/v1/gifs"
 )
 
 // gipyImageData is the basic image data struct
@@ -114,20 +116,17 @@ type Giphy struct {
     apiKey string
 }
 
-// Constructor function
-func NewGiphy(apiKey string) * Giphy {
-    return &Giphy{
-        apiKey: apiKey,
-    }
-}
 
 // Build a API URL based on given action
-func (g * Giphy) buildUrl(action string) string {
+func (g * Giphy) _buildUrl(action string) string {
+    if action != "" && action[0] != '/' {
+        action = "/" + action
+    }
     return BASE_URL + action + "?api_key=" + g.apiKey
 }
 
 // Fetch API data from given URL
-func (g * Giphy) fetch(url string) ([]byte, error) {
+func (g * Giphy) _fetch(url string) ([]byte, error) {
     resp, err := http.Get(url)
     if err != nil {
         return nil, err
@@ -141,4 +140,58 @@ func (g * Giphy) fetch(url string) ([]byte, error) {
     }
 
     return body, nil
+}
+
+// _parseDataSingle is a function to parse JSON data for single data
+// entries from byte array
+func (g * Giphy) _parseDataSingle(body []byte) (*giphyDataSingle, error) {
+    var data giphyDataSingle
+    err := json.Unmarshal(body, &data)
+    if err != nil {
+        return nil, err
+    }
+
+    return &data, nil
+}
+
+// _parseDataSingle is a function to parse JSON data for multiple data
+// entries from byte array
+func (g * Giphy) _parseDataArray(body []byte) (*giphyDataArray, error) {
+    var data giphyDataArray
+    err := json.Unmarshal(body, &data)
+    if err != nil {
+        return nil, err
+    }
+
+    return &data, nil
+}
+
+// Constructor function
+func NewGiphy(apiKey string) * Giphy {
+    return &Giphy{
+        apiKey: apiKey,
+    }
+}
+
+// GetById fetches GIF image information based on given ID string
+// More information: https://github.com/Giphy/GiphyAPI#get-gif-by-id-endpoint
+func (g * Giphy) GetById(id string) (*giphyDataSingle, error) {
+    body, err := g._fetch(g._buildUrl(id))
+    if err != nil {
+        return nil, err
+    }
+
+    return g._parseDataSingle(body)
+}
+
+// GetById fetches GIF image information for multiple ids based
+// on given ID string array
+// More information: https://github.com/Giphy/GiphyAPI#get-gifs-by-id-endpoint
+func (g * Giphy) GetByIds(ids []string) (*giphyDataArray, error) {
+    body, err := g._fetch(g._buildUrl("") + "&ids=" + strings.Join(ids, ","))
+    if err != nil {
+        return nil, err
+    }
+
+    return g._parseDataArray(body)
 }

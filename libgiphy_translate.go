@@ -10,12 +10,11 @@
 package libgiphy
 
 import (
-    "encoding/json"
     "net/url"
 )
 
 func (g * Giphy) GetTranslate(term, rating, lang string, doFmt bool) (*giphyDataSingle, error) {
-    apiUrl := g.buildUrl("translate") + "&s=" + url.QueryEscape(term);
+    apiUrl := g._buildUrl("translate") + "&s=" + url.QueryEscape(term);
 
     if rating != "" {
         apiUrl += "&rating=" + rating
@@ -29,16 +28,10 @@ func (g * Giphy) GetTranslate(term, rating, lang string, doFmt bool) (*giphyData
         apiUrl += "&fmt"
     }
 
-    body, err := g.fetch(apiUrl)
+    body, err := g._fetch(apiUrl)
     if err != nil {
         return nil, err
     }
 
-    var data giphyDataSingle
-    err = json.Unmarshal(body, &data)
-    if err != nil {
-        return nil, err
-    }
-
-    return &data, nil;
+    return g._parseDataSingle(body)
 }

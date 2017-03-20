@@ -10,14 +10,11 @@
 package libgiphy
 
 import (
-    "encoding/json"
     "net/url"
 )
 
-
-
 func (g * Giphy) GetSearch(query string, limit, offset int, rating, lang string, doFmt bool) (*giphyDataArray, error) {
-    apiUrl := g.buildUrl("search") + "&q=" + url.QueryEscape(query);
+    apiUrl := g._buildUrl("search") + "&q=" + url.QueryEscape(query);
 
     if limit > 0 {
         apiUrl += "&limit=" + string(limit)
@@ -39,16 +36,10 @@ func (g * Giphy) GetSearch(query string, limit, offset int, rating, lang string,
         apiUrl += "&fmt"
     }
 
-    body, err := g.fetch(apiUrl)
+    body, err := g._fetch(apiUrl)
     if err != nil {
         return nil, err
     }
 
-    var data giphyDataArray
-    err = json.Unmarshal(body, &data)
-    if err != nil {
-        return nil, err
-    }
-
-    return &data, nil;
+    return g._parseDataArray(body)
 }

@@ -9,22 +9,11 @@
 
 package libgiphy
 
-import (
-    "encoding/json"
-)
-
-
 func (g * Giphy) GetTrending() (*giphyDataArray, error) {
-    body, err := g.fetch(g.buildUrl("trending"))
+    body, err := g._fetch(g._buildUrl("trending"))
     if err != nil {
         return nil, err
     }
 
-    var data giphyDataArray
-    err = json.Unmarshal(body, &data)
-    if err != nil {
-        return nil, err
-    }
-
-    return &data, nil;
+    return g._parseDataArray(body)
 }

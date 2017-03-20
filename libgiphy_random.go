@@ -39,7 +39,7 @@ type giphyDataRandom struct {
 
 
 func (g * Giphy) GetRandom(tag string) (*giphyDataRandom, error) {
-    body, err := g.fetch(g.buildUrl("random") + "&tag=" + url.QueryEscape(tag))
+    body, err := g._fetch(g._buildUrl("random") + "&tag=" + url.QueryEscape(tag))
     if err != nil {
         return nil, err
     }
