@@ -9,6 +9,8 @@ import (
     "io/ioutil"
     "encoding/json"
     "strings"
+    "fmt"
+    "errors"
 )
 
 const (
@@ -132,6 +134,10 @@ func (g * Giphy) _fetch(url string) ([]byte, error) {
         return nil, err
     }
 
+    if resp.StatusCode != 200 {
+        return nil, errors.New(fmt.Sprintf("Error HTTP status %d: %s", resp.StatusCode, resp.Status))
+    }
+
     defer resp.Body.Close()
 
     body, err := ioutil.ReadAll(resp.Body)
@@ -146,6 +152,11 @@ func (g * Giphy) _fetch(url string) ([]byte, error) {
 // entries from byte array
 func (g * Giphy) _parseDataSingle(body []byte) (*giphyDataSingle, error) {
     var data giphyDataSingle
+
+    if len(body) <= 0 {
+        return nil, errors.New("_parseDataArray: No data in response body to parse.")
+    }
+
     err := json.Unmarshal(body, &data)
     if err != nil {
         return nil, err
@@ -158,6 +169,11 @@ func (g * Giphy) _parseDataSingle(body []byte) (*giphyDataSingle, error) {
 // entries from byte array
 func (g * Giphy) _parseDataArray(body []byte) (*giphyDataArray, error) {
     var data giphyDataArray
+
+    if len(body) <= 0 {
+        return nil, errors.New("_parseDataArray: No data in response body to parse.")
+    }
+
     err := json.Unmarshal(body, &data)
     if err != nil {
         return nil, err

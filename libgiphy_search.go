@@ -11,17 +11,18 @@ package libgiphy
 
 import (
     "net/url"
+    "strconv"
 )
 
 func (g * Giphy) GetSearch(query string, limit, offset int, rating, lang string, doFmt bool) (*giphyDataArray, error) {
     apiUrl := g._buildUrl("search") + "&q=" + url.QueryEscape(query);
 
     if limit > 0 {
-        apiUrl += "&limit=" + string(limit)
+        apiUrl += "&limit=" + strconv.Itoa(limit)
     }
 
     if offset > 0 {
-        apiUrl += "&offset=" + string(offset)
+        apiUrl += "&offset=" + strconv.Itoa(offset)
     }
 
     if rating != "" {
